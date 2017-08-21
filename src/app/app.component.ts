@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
+import { Hero } from './hero';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  styles: [`
+  styles: [
+    `
   .selected {
     background-color: #CFD8DC !important;
     color: white;
@@ -52,45 +54,36 @@ import { Component } from '@angular/core';
     margin-right: .8em;
     border-radius: 4px 0 0 4px;
   }
-`],
-// backtickk notation for multiline strings
+`
+  ],
+  // backtickk notation for multiline strings
   template: `
   <h1>{{title}}</h1>
-  <h2>{{hero.name}} details!</h2>
-
-  <div><label>id: </label>{{hero.id}}</div>
-  <div><label>name: </label>
-  <input [(ngModel)]="hero.name" placeholder="name">
-</div>
-<h2>My Heroes</h2>
-<ul class="heroes">
-  <li>
-    <li *ngFor="let hero of heroes" (click)="onSelect(hero)">
-    <span class="badge">{{hero.id}}</span> {{hero.name}}
-  </li>
-</ul>` // <--[(ngModel)] binds the hero.name property to the textbox.
-// span class is used to list the heroes
-
+    <h2>My Heroes</h2>
+    <ul class="heroes">
+      <li *ngFor="let hero of heroes"
+        [class.selected]="hero === selectedHero"
+        (click)="onSelect(hero)">
+        <span class="badge">{{hero.id}}</span> {{hero.name}}
+      </li>
+    </ul>
+    <hero-detail [hero]="selectedHero"></hero-detail>`
+// <--[(ngModel)] binds the hero.name property to the textbox.
+  // span class is used to list the heroes
 })
-
 export class AppComponent {
   title = 'Tour of Heroes';
   hero: Hero = {
-  id: 1,
-  name: 'Windstorm'
-};
-selectedHero: Hero;
-heroes = HEROES;  // A public property that exposes the heros for binding
+    id: 1,
+    name: 'Windstorm'
+  };
+  selectedHero: Hero;
+  heroes = HEROES; // A public property that exposes the heros for binding
 
-onSelect(hero: Hero): void {
-  this.selectedHero = hero;
+  onSelect(hero: Hero): void {
+    this.selectedHero = hero;
+  }
 }
-}
-
-export class Hero {
-  id: number;
-  name: string;
-}  // hero is converted to a class because it need more propertoes
 
 const HEROES: Hero[] = [
   { id: 11, name: 'Mr. Nice' },
@@ -104,5 +97,3 @@ const HEROES: Hero[] = [
   { id: 19, name: 'Magma' },
   { id: 20, name: 'Tornado' }
 ]; // mock heros that will be displayed when data is fetched from a web service
-
-
