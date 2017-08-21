@@ -1,13 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Hero } from './hero';
+import { HeroService } from './hero.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
+  providers: [HeroService],
   styleUrls: ['./app.component.css'],
   styles: [
-    `
-  .selected {
+    ` .selected {
     background-color: #CFD8DC !important;
     color: white;
   }
@@ -68,32 +69,30 @@ import { Hero } from './hero';
       </li>
     </ul>
     <hero-detail [hero]="selectedHero"></hero-detail>`
-// <--[(ngModel)] binds the hero.name property to the textbox.
+  // <--[(ngModel)] binds the hero.name property to the textbox.
   // span class is used to list the heroes
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'Tour of Heroes';
-  hero: Hero = {
-    id: 1,
-    name: 'Windstorm'
-  };
+  heroes: Hero[];
   selectedHero: Hero;
-  heroes = HEROES; // A public property that exposes the heros for binding
+
+  constructor(private heroService: HeroService) {}
+  // A public property that exposes the heros for binding
+
+  getHeroes(): void {
+    this.heroService.getHeroes().then(heroes => (this.heroes = heroes));
+
+  }
+
+  ngOnInit(): void {
+    this.getHeroes();
+  }
 
   onSelect(hero: Hero): void {
     this.selectedHero = hero;
   }
+  // Acts on the heroes declared in heroes-service.ts
 }
 
-const HEROES: Hero[] = [
-  { id: 11, name: 'Mr. Nice' },
-  { id: 12, name: 'Narco' },
-  { id: 13, name: 'Bombasto' },
-  { id: 14, name: 'Celeritas' },
-  { id: 15, name: 'Magneta' },
-  { id: 16, name: 'RubberMan' },
-  { id: 17, name: 'Dynama' },
-  { id: 18, name: 'Dr IQ' },
-  { id: 19, name: 'Magma' },
-  { id: 20, name: 'Tornado' }
-]; // mock heros that will be displayed when data is fetched from a web service
+
