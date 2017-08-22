@@ -8,3 +8,4 @@ export class Hero {
   ) {  }
 
 }
+// the ? means alterEgo is optional
